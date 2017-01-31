@@ -5,19 +5,15 @@
     <title>Time Use Simulation</title>
     <meta name="description" content="Time Use Simulation">
     <script src="https://aframe.io/releases/0.4.0/aframe.min.js"></script>
-    </head>
+    <script src="https://unpkg.com/aframe-text-component@^0.4.1/dist/aframe-text-component.min.js"></script>
   </head>
   <body>
     <a-scene tick>
-      <a-assets>
-        <a-asset-item id="optimerBoldFont" src="https://rawgit.com/mrdoob/three.js/dev/examples/fonts/optimer_bold.typeface.json"></a-asset-item>
-      </a-assets>
-
       <a-plane rotation="-90 0 0" width="10000" height="10000" color="white"></a-plane>
       <a-sky color="#ECECEC"></a-sky>
 
       <a-entity position="0 100 0">
-        <a-camera near="50" far="10000"></a-camera>
+        <a-camera near="10" far="10000"></a-camera>
       </a-entity>
     </a-scene>
 

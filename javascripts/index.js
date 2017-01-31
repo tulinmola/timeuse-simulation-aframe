@@ -126,6 +126,55 @@ d3.tsv("data/days-simulated-v2.tsv", function(error, data) {
       .attr("position", function(d) { return d.x + " " + RADIUS + " " + d.y});
   		// .call(force.drag);
   // When all elements are added to group show them
+
+  // Activity labels
+	var label = group.selectAll(".actlabel")
+		.data(act_codes)
+	  .enter().append("a-entity")
+    .attr("scale", "-8 8 8")
+		.attr("class", "actlabel")
+    .attr("rotation", function(d, i) {
+      if (d.desc == center_act) {
+        return "90 0 180";
+  		} else {
+  			var theta = i * 2 * Math.PI / (act_codes.length-1),
+            deg = 90 - theta * (180 / Math.PI);
+        return "0 " + deg + " 0";
+  		}
+
+    })
+    .attr("position", function(d, i) {
+      var x, y;
+      if (d.desc == center_act) {
+  			x = center_pt.x;
+        y = center_pt.y;
+  		} else {
+  			var theta = 2 * Math.PI / (act_codes.length-1);
+  			x = 150 * Math.cos(i * theta);
+        y = 150 * Math.sin(i * theta);
+  		}
+
+      return x + " 70 " + y;
+    });
+
+  label.append("a-entity")
+    .attr("class", "tspan")
+    .attr("material", "color: #333")
+    .attr("position", function(d) {
+      var x = -d.short.length * 0.2
+      return x + " 0 0";
+    })
+    .attr("text", function(d) {
+      return "text: " + d.short;
+    })
+
+  label.append("a-entity")
+    .attr("position", "0 -1 0")
+		.attr("class", "tspan actpct")
+		.attr("text", function(d) {
+			return "text: " + act_counts[d.index] + "%";
+		});
+
   group.attr("visible", true)
 
   // Update nodes based on activity and duration
@@ -167,10 +216,11 @@ d3.tsv("data/days-simulated-v2.tsv", function(error, data) {
 
 		// Update percentages
     // TODO
-		// label.selectAll("tspan.actpct")
-		// 	.text(function(d) {
-		// 		return readablePercent(act_counts[d.index]);
-		// 	});
+		label.selectAll(".actpct")
+      .attr("material", "color: #999")
+			.attr("text", function(d) {
+				return "text: " + readablePercent(act_counts[d.index]);
+			});
 
 		// Update time
     // TODO
@@ -301,6 +351,17 @@ function updateObject3D() {
       material.color.set(data.color)
     }
   });
+}
+
+function readablePercent(n) {
+	var pct = 100 * n / 1000;
+	if (pct < 1 && pct > 0) {
+		pct = "<1%";
+	} else {
+		pct = Math.round(pct) + "%";
+	}
+
+	return pct;
 }
 
 d3.selection.prototype.updateObject3D = updateObject3D;
